@@ -1,0 +1,47 @@
+#NEXUS
+
+Begin trees;
+
+tree reroot_branch=(((((acusM:0.00507079402982342844,(acusC:0.00365693401207576674,acusG:0.00361856945160215267):0.00151338314706858873):0.00249700675089769035,acusR:0.00725721799030739582):0.01576505924474339709,(WhiteLippe:0.00799466851520824230,MileDeer:0.00865836853954719647):0.01007714972029917500):0.00440532557885714264,(ChineseWat:0.02779700275259019276,Reindeer:0.02131016903831483428):0.00433458392431405274):0.03742258935098061873,Cattle:0.03742258935098061873);
+END;
+
+BEGIN r8s;
+
+BLFORMAT lengths=persite nsites=3092579 ultrametric=no;
+
+COLLAPSE;
+
+MRCA GC acusG acusC;
+MRCA MGC acusG acusC acusM;
+MRCA RMGC acusG acusC acusM acusR;
+MRCA WLML WhiteLippe MileDeer;
+MRCA WLML_RMGC acusG acusC acusM acusR WhiteLippe MileDeer;
+MRCA RCW Reindeer ChineseWat;
+MRCA WLML_RMGC_RCW acusG acusC acusM acusR WhiteLippe MileDeer Reindeer ChineseWat;
+MRCA C_WLML_RMGC_RCW acusG acusC acusM acusR WhiteLippe MileDeer Reindeer ChineseWat Cattle;
+
+FIXAGE taxon=RMGC age=3.05;
+constrain taxon=WLML_RMGC_RCW min_age=9.8 max_age=17.3;
+constrain taxon=C_WLML_RMGC_RCW min_age=17.2 max_age=21.5;
+
+
+set penalty=log smoothing=3;
+divtime method=PL algorithm=TN;
+showage shownamed=yes;
+
+set penalty=log smoothing=3;
+divtime method=pl algorithm=tn;
+showage shownamed=yes;
+
+describe plot=phylogram;
+describe plot=chronogram;
+describe plot=tree_description;
+describe plot=chrono_description;
+describe plot=phylo_description;
+describe plot=rato_description;
+showage;
+
+set penalty=add checkgradient=no;
+DIVTIME method=PL fossilconstrained=yes crossv=yes cvstart=0 cvinc=0.50 cvnum=6 algorithm=tn;
+DIVTIME method=PL fossilfixed=yes crossv=yes cvstart=0 cvinc=0.50 cvnum=6 algorithm=tn;
+end;
